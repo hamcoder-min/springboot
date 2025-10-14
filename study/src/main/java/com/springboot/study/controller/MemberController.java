@@ -44,4 +44,10 @@ public class MemberController {
     public String signup() {
         return "signup";  //회원가입 화면, view name --> templates
     }
+
+    @PostMapping("/signup")
+    public String signup(Member member, Model model) {
+        model.addAttribute("member", member);
+        return "signupResult";
+    }
 }

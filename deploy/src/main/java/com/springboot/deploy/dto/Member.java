@@ -1,4 +1,4 @@
-package com.springboot.study.dto;
+package com.springboot.deploy.dto;
 
 public class Member {
     private String id;
