@@ -10,16 +10,9 @@ import java.util.Objects;
 
 @RestController //내부에 @ResponseBody 포함, Map 객체 생성 없이 JSON 객체 바로 전송 가능
 public class MemberRestController {
-    @PostMapping("restSignup")
-    public Map<String, Object> restSignup(@RequestBody Member member) {
-        Object result = null;
-        if() result =
-
-        Map<String, Object> response = new HashMap<String, Object>();
-        response.put("result", result);
-        response.put("member", member);
-
-        return response;
+    @PostMapping("/restSignup")
+    public Member restSignup(@RequestBody Member member) {
+        return member;
     }
 
 
