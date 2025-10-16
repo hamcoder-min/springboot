@@ -33,7 +33,7 @@ public class MemberController {
         String msg = "";
         if(result) msg = "이미 사용중인 아이디 입니다.";
         else msg = "사용 가능한 아이디 입니다.";
-        
+
         return msg;
     }
 }

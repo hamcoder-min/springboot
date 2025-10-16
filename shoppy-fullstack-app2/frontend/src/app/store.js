@@ -29,8 +29,8 @@ export const store = configureStore({
         product: productSlice,
         auth: authSlice
     },
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware()
-        .concat(myLoggerMiddleware)
-        .concat(myCartSaveMiddleware)
+//    middleware: (getDefaultMiddleware) =>
+//        getDefaultMiddleware()
+//        .concat(myLoggerMiddleware)
+//        .concat(myCartSaveMiddleware)
 })
