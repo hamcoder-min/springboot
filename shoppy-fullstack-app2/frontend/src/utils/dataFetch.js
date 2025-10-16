@@ -22,7 +22,7 @@ export const groupByRows = (array, number) => {
 /**
  * axios 함수를 이용하여 백엔드 연동 처리
  */
-export const axiosData = async (url, formData) => {   //파싱 작업 필요 X
+export const axiosPost = async (url, formData) => {   //파싱 작업 필요 X
     const response = await axios.post(url, formData, {"Content-Type": "application/json"});
     return response.data;
 }
