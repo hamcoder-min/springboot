@@ -24,10 +24,6 @@ public class MemberController {
         boolean result = false;
         boolean rows = memberService.login(member.getId(), member.getPwd());
 
-        String msg = "";
-        if(rows) msg = "로그인 완료!";
-        else msg = "아이디, 비밀번호를 확인해주세요";
-
         return rows;
     }
 
