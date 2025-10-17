@@ -2,37 +2,48 @@ package com.springboot.shoppy_fullstack_app.controller;
 
 import com.springboot.shoppy_fullstack_app.dto.Member;
 import com.springboot.shoppy_fullstack_app.service.MemberService;
-import com.springboot.shoppy_fullstack_app.service.MemberServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/member")
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class MemberController {
+
+    //서비스 객체 가져오기
+    private final MemberService memberService;
+
+    @Autowired
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService; //컨테이너에 생성된 서비스 객체
+    }
+
+
     @PostMapping("/login")
     public boolean login(@RequestBody Member member) {
         boolean result = false;
-        if(member.getId().equals("test") && member.getPwd().equals("1234")) result = true;
+        boolean rows = memberService.login(member.getId(), member.getPwd());
 
-        return result;
+        String msg = "";
+        if(rows) msg = "로그인 완료!";
+        else msg = "아이디, 비밀번호를 확인해주세요";
+
+        return rows;
     }
 
     @PostMapping("/signup")
     public boolean signup(@RequestBody Member member) {
-
         boolean result = true;
-        System.out.println(member.getId());
-        System.out.println(member.getPwd());
-        System.out.println(member.getName());
-        System.out.println(member.getPhone());
-        System.out.println(member.getEmail());
-
+        //서비스 호출
+        int rows = memberService.signup(member);
+        if(rows == 1) result = true;
         return result;
     }
 
     @PostMapping("/idcheck")
     public String idcheck(@RequestBody Member member) {
-        boolean result = false; //아이디 O: 1, X: 0
+        boolean result = memberService.idCheck(member.getId());
+
         String msg = "";
         if(result) msg = "이미 사용중인 아이디 입니다.";
         else msg = "사용 가능한 아이디 입니다.";
