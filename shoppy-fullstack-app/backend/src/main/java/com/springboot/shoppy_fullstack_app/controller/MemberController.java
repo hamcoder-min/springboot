@@ -1,6 +1,8 @@
 package com.springboot.shoppy_fullstack_app.controller;
 
 import com.springboot.shoppy_fullstack_app.dto.Member;
+import com.springboot.shoppy_fullstack_app.service.MemberService;
+import com.springboot.shoppy_fullstack_app.service.MemberServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +19,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     public boolean signup(@RequestBody Member member) {
+
         boolean result = true;
         System.out.println(member.getId());
         System.out.println(member.getPwd());
