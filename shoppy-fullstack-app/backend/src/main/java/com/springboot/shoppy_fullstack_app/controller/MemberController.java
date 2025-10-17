@@ -13,6 +13,7 @@ public class MemberController {
     //서비스 객체 가져오기
     private final MemberService memberService;
 
+    //생성자
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService; //컨테이너에 생성된 서비스 객체
