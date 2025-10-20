@@ -37,6 +37,7 @@ desc product;
 select * from product;
 insert into product(name, price, info, rate, image, imgList)
 			values
+            ('후드티', 15000, '분홍색 후드티', 4.2, '1.webp', JSON_Array('1.webp', '1.webp', '1.webp')),
             ('후드티', 15000, '검정색 후드티', 2.2, '2.webp', JSON_Array('2.webp', '2.webp', '2.webp')),
             ('원피스', 25000, '원피스', 4, '3.webp', JSON_Array('3.webp', '3.webp', '3.webp')),
             ('반바지', 12000, '반바지', 3.2, '4.webp', JSON_Array('4.webp', '4.webp', '4.webp')),
