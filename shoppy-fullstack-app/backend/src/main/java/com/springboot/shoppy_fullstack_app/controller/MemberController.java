@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/member")
-@CrossOrigin(origins = {"http://localhost:3000"})
+//@CrossOrigin(origins = {"http://localhost:3000"}) //SecurityConfig 파일 안에서 config.setAllowedOrigins(List.of("http://localhost:3000"));로 넣어줬으므로 없애줘야함 (맥 오류)
 public class MemberController {
 
     //서비스 객체 가져오기
@@ -22,10 +22,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public boolean login(@RequestBody Member member) {
-        boolean result = false;
-        boolean rows = memberService.login(member.getId(), member.getPwd());
-
-        return rows;
+        return memberService.login(member);
     }
 
     @PostMapping("/signup")

@@ -19,7 +19,11 @@ repositories {
 }
 
 dependencies {
+    //Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     //JDBC - jdbcTemplate
+    //MySQL JDBC Driver
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     runtimeOnly 'mysql:mysql-connector-java:8.0.31'
 
