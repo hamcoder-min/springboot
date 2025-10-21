@@ -21,7 +21,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductQna findQna(int pid) {
+    public List<ProductQna> findQna(int pid) {
         return productRepository.findQna(pid);
     }
 

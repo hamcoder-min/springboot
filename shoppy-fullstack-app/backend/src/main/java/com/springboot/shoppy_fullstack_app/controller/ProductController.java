@@ -20,7 +20,7 @@ public class ProductController {
     }
 
     @PostMapping("/qna")
-    public ProductQna productQna(@RequestBody Product product) {
+    public List<ProductQna> productQna(@RequestBody Product product) {
         return productService.findQna(product.getPid());
     }
 

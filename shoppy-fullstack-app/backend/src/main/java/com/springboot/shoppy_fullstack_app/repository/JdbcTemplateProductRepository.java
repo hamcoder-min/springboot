@@ -19,17 +19,15 @@ public class JdbcTemplateProductRepository implements ProductRepository{
     }
 
     @Override
-    public ProductQna findQna(int pid) {
+    public List<ProductQna> findQna(int pid) {
         String sql = "select qid, title, content, is_complete as isComplete, is_lock as isLock, id, pid, cdate from product_qna where pid = ?";
-        ProductQna productQna = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ProductQna.class), pid);
-        return productQna;
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductQna.class), pid);
     }
 
     @Override
     public ProductDetailinfo findProductDetailinfo(int pid) {
         String sql = "select did, title_en as titleEn, title_ko as titleKo, pid, list from product_detailinfo where pid = ?";
-        ProductDetailinfo productInfo = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ProductDetailinfo.class), pid);
-        return productInfo;
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ProductDetailinfo.class), pid);
     }
 
     @Override

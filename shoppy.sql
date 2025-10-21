@@ -159,6 +159,11 @@ from
     ) as jt;    
 
 select * from product_qna;
+desc product_qna;
+
+select 	qid, title, content, is_complete as isComplete, is_lock as isLock, id, pid, cdate 
+from 	product_qna
+where	pid = 1;
 
 -- test333 회원이 분홍색 후드티(pid:1) 상품에 쓴 QnA 조회
 -- 회원아이디(id), 회원명(name), 가입날짜(mdate), 상품명(name), 상품가격(price), QnA 제목(title), 내용(content), 등록날짜(cdate)
@@ -176,6 +181,3 @@ where 	m.id = pq.id
 	and m.id = 'test333' 
     and p.pid = 1;
 
-select 	qid, title, content, is_complete as isComplete, is_lock as isLock, id, pid, cdate 
-from 	product_qna
-where	pid = 1;
