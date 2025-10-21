@@ -32,7 +32,7 @@ export const axiosGet = async (url) => {   //파싱 작업 필요 X
  */
 export const axiosPost = async (url, formData) => {   //파싱 작업 필요 X
     const response = await axios.post(url, formData, {"Content-Type": "application/json"});
-    console.log(response);
+//    console.log(response);
 
     /* const response = await axios({
         method: "POST",

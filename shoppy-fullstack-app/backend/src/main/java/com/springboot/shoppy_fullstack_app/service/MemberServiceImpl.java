@@ -1,6 +1,7 @@
 package com.springboot.shoppy_fullstack_app.service;
 
 import com.springboot.shoppy_fullstack_app.dto.Member;
+import com.springboot.shoppy_fullstack_app.dto.ProductDetailinfo;
 import com.springboot.shoppy_fullstack_app.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

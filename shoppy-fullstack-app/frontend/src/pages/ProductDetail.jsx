@@ -88,9 +88,9 @@ export function ProductDetail() {
                         </li>
                     )}
                 </ul>
-                {tabName === "detail" && <Detail imgList={imgList} info={product.detailInfo} />}
+                {tabName === "detail" && <Detail imgList={imgList} pid={pid} />}
                 {tabName === "review" && <Review />}
-                {tabName === "qna" && <QnA />}
+                {tabName === "qna" && <QnA pid={pid} />}
                 {tabName === "return" && <Return/>}
             </div>
             <div style={{marginBottom: "50px"}}></div>

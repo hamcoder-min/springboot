@@ -1,38 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { axiosData } from '../../utils/dataFetch.js';
 import { CiLock } from "react-icons/ci";
+import { getQna } from "../../feature/product/productAPI.js";
 
-export function QnA() {
-    const [qnaData, setQnaData] = useState([]);
+export function QnA({pid}) {
+    const [qnaData, setQnaData] = useState({});
     const [openQid, setOpenQid] = useState(null);
     const [isOpen, setIsOpen] = useState(true);
     
     useEffect(() => {
         const fetch = async () => {
-            const jsonData = await axiosData("/data/productQnA.json");
+            const jsonData = await getQna(pid);
             setQnaData(jsonData);
         }
         fetch();
     }, []);
-    
-    const handleToggle = (qid) => {
-        setOpenQid(prev => (prev === qid) ? null : qid);
-    }
 
-    const handleToggleButton = () => {
-        setIsOpen(!isOpen);
-    }
+    console.log("qnaData --> ", qnaData);
+//     const handleToggle = (qid) => {
+//         setOpenQid(prev => (prev === qid) ? null : qid);
+//     }
+//
+//     const handleToggleButton = () => {
+//         setIsOpen(!isOpen);
+//     }
 
     return (
         <div>
             <div style={{paddingTop:"20px"}}>
                 {isOpen &&
-                    <button type='button' style={{backgroundColor: "green"}} onClick={handleToggleButton}>
+                    <button type='button' style={{backgroundColor: "green"}}>
                         상품문의
                     </button>
                 }
                 {!isOpen &&
-                    <button type='button' style={{backgroundColor: "coral"}} onClick={handleToggleButton}>
+                    <button type='button' style={{backgroundColor: "coral"}}>
                         상품문의
                     </button>
                 }
@@ -46,7 +47,7 @@ export function QnA() {
                                 {item.isComplete ? <span>답변완료</span> : <span>접수완료</span>}
                             </td>
                             <td style={{width:"60%"}}>
-                                <span style={{cursor:"pointer"}}  onClick={() => {handleToggle(item.qid)}}>{item.title}</span>
+                                <span style={{cursor:"pointer"}}  >{item.title}</span>
                                 {item.isLock && <CiLock />}
                                 {openQid === item.qid && <span>{item.content}</span>}
                             </td>

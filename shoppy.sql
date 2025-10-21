@@ -51,3 +51,131 @@ desc product;
 select pid, name, price, info, rate, image, imgList from product where pid = 1;
 
 select pid, name, price, info, rate, trim(image) as image, imgList from product where pid = 1;
+
+/***********************************************
+	상품상세정보 테이블 생성 : product_detailinfo
+***********************************************/
+show tables;
+drop table product_detailinfo;
+create table product_detailinfo(
+	did				int 			auto_increment		primary key
+    , title_en		varchar(100)	not null
+    , title_ko		varchar(100)	not null
+    , pid 			int 			not null
+    , list 			json	-- nodeJS(JSON), springboot(String, List<>)
+    , constraint fk_product_pid		foreign key(pid)
+		references product(pid)
+        on delete cascade
+        on update cascade
+);
+desc product_detailinfo;
+select * from product_detailinfo;
+
+-- mysql에서 json, csv, excel, ... 데이터 파일을 업로드 하는 경로
+show variables like 'secure_file_priv';
+
+-- products.json 파일의 detailinfo 정보 매핑
+insert into product_detailinfo(title_en, title_ko, pid, list)
+select 
+	jt.title_en
+    , jt.title_ko
+    , jt.pid
+    , jt.list
+from 
+	json_table(
+		cast(load_file('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/products.json')
+			AS CHAR CHARACTER SET utf8mb4),
+            '$[*]' COLUMNS (
+				title_en		varchar(100) 	path	'$.detailInfo.title_en'
+                , title_ko		varchar(100)	path	'$.detailInfo.title_ko'
+                , list			json 			path	'$.detailInfo.list'
+                , pid			int 			path	'$.pid'
+            )
+    ) as jt;
+    
+select * from product_detailinfo;
+    
+-- pid: 1에 대한 상품정보와 상세정보 출력
+select * 
+from product p, product_detailinfo pd
+where p.pid = pd.pid
+and p.pid = 1;
+    
+select did, title_en as titleEn, title_ko as titleKo, pid, list 
+from product_detailinfo 
+where pid = 1;
+    
+select * from member;
+
+/***********************************************
+	상품상세정보 테이블 생성 : product_qna
+***********************************************/
+show tables;
+drop table product_qna;
+desc member;
+create table product_qna(
+	qid				int 			auto_increment		primary key
+    , title			varchar(100)	not null
+    , content		varchar(200)
+    , is_complete	boolean
+    , is_lock		boolean
+    , id			varchar(50)		not null
+    , pid 			int 			not null
+	, cdate			datetime
+    , constraint fk_product_qna_pid		foreign key(pid)	references product(pid)
+        on delete cascade	on update cascade
+	, constraint fk_member_qna_id		foreign key(id)		references member(id)
+        on delete cascade	on update cascade
+);
+desc product_qna;
+select * from product_qna;
+
+-- mysql에서 json, csv, excel, ... 데이터 파일을 업로드 하는 경로
+show variables like 'secure_file_priv';
+
+-- product_qna data insert
+insert into product_qna(title, content, is_complete, is_lock, id, pid, cdate)
+select 
+	jt.title
+    , jt.content
+    , jt.is_complete
+    , jt.is_lock
+    , jt.id
+    , jt.pid
+    , jt.cdate
+from 
+	json_table(
+		cast(load_file('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/productQnA.json')
+			AS CHAR CHARACTER SET utf8mb4),
+            '$[*]' COLUMNS (
+				title			varchar(100) 	path	'$.title'
+                , content		varchar(200)	path	'$.content'
+                , is_complete	boolean			path	'$.isComplete'
+                , is_lock		boolean			path	'$.isLock'
+                , id			varchar(50)		path	'$.id'
+                , pid			int				path	'$.pid'
+                , cdate			datetime		path	'$.cdate'
+            )
+    ) as jt;    
+
+select * from product_qna;
+
+-- test333 회원이 분홍색 후드티(pid:1) 상품에 쓴 QnA 조회
+-- 회원아이디(id), 회원명(name), 가입날짜(mdate), 상품명(name), 상품가격(price), QnA 제목(title), 내용(content), 등록날짜(cdate)
+select 	m.id
+		, m.name
+        , m.mdate
+        , p.name
+        , p.price
+        , pq.title
+        , pq.content
+        , pq.cdate
+from 	member m, product p, product_qna pq
+where 	m.id = pq.id 
+	and p.pid = pq.pid
+	and m.id = 'test333' 
+    and p.pid = 1;
+
+select 	qid, title, content, is_complete as isComplete, is_lock as isLock, id, pid, cdate 
+from 	product_qna
+where	pid = 1;

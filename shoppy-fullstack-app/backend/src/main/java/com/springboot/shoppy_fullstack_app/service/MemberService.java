@@ -6,4 +6,5 @@ public interface MemberService {
     int signup(Member member);
     boolean idCheck(String id);
     boolean login(Member member);
+
 }
