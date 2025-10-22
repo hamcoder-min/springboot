@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { PiGiftThin } from 'react-icons/pi';
 import { ImageList } from '../components/commons/ImageList.jsx';
 import { StarRating } from '../components/commons/StarRating.jsx';
@@ -14,9 +14,11 @@ import { getProduct } from '../feature/product/productAPI.js';
 
 export function ProductDetail() {
     const {pid} = useParams();    //{pid: 1}
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const product = useSelector((state) => state.product.product);
     const imgList = useSelector((state) => state.product.imgList);
+    const isLogin = useSelector((state) => state.auth.isLogin);
 
     const [size, setSize] = useState('XS');
     const [tabName, setTabName] = useState('detail');
@@ -64,7 +66,9 @@ export function ProductDetail() {
                         <button type='button' className='product-detail-button order'>바로 구매</button>
                         <button type='button' 
                                 className='product-detail-button cart'
-                                onClick={() => {dispatch(addCart(product.pid, size))}}>
+                                onClick={() => {
+                                    isLogin ? dispatch(addCart(product.pid, size))
+                                    :  navigate("/login")}}>
                             쇼핑백 담기
                         </button>
                         <div type='button' className='gift'>
