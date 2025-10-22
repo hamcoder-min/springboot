@@ -15,31 +15,38 @@ export const showCart = () => async (dispatch) => {
 }
 
 export const updateCart = async (cid, type) => {
-    return 1;
+    const url = "/cart/updateQty";
+    const data = {"cid": cid, "type": type};
+    const rows = await axiosPost(url, data);
+    console.log('updateCart rows -> ', rows);
+    return rows;
 //    dispatch(updateCartItem({"cid": cid, "type": type}));   //cartList 수량 변경
 //    dispatch(updateTotalPrice());
 //    dispatch(updateCartCount());
 }
 
-export const checkQty = async (pid, size) => {
+export const checkQty = async (pid, size, id) => {
     //쇼핑백 추가한 상품과 사이즈가 DB 테이블에 있는지 유무 확인
     const url = "/cart/checkQty";
-    const data = {"pid": pid, "size": size};
-    const checkRows = await axiosPost(url, data);
+    const data = {"pid": pid, "size": size, "id": id};
+    const jsonData = await axiosPost(url, data);
+    return jsonData;
 }
 
 export const addCart = (pid, size) => async (dispatch) => {
-    const updateRows = await updateCart(pid, size);
-    console.log("up --> ", updateRows);
-//    if(!pid) {
-//        const url = "/cart/add";
-//        const {userId} = JSON.parse(localStorage.getItem("loginInfo"));
-//        const item = {"pid": pid, "size": size, "qty": 1, "id": userId};
-//        const rows = await axiosPost(url, item);
-//        console.log("rows -> ", rows);
-//    } else {
-//        //qty update
-//    }
+    const {userId} = JSON.parse(localStorage.getItem("loginInfo"));
+    const checkResult = await checkQty(pid, size, userId);
+
+    if(!checkResult.checkQty) {
+        const url = "/cart/add";
+        const item = {"pid": pid, "size": size, "qty": 1, "id": userId};
+        const rows = await axiosPost(url, item);
+//        alert("새로운 상품이 추가되었습니다.");
+        dispatch(updateCartCount());
+    } else {
+        //qty update
+        const rows = await updateCart(checkResult.cid, "+");
+    }
     return 1;
 
 //    dispatch(addCartItem({"cartItem": {"pid": pid, "size": size, "qty": 1}}));

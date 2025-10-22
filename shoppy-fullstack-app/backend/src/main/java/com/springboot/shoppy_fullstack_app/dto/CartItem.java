@@ -11,4 +11,5 @@ public class CartItem {
     private String id;
     private String cdate;
     private int checkQty;
+    private String type;
 }

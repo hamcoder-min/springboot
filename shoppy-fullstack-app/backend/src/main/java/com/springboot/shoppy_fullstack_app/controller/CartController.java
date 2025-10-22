@@ -21,7 +21,12 @@ public class CartController {
     }
 
     @PostMapping("/checkQty")
-    public String checkQty(@RequestBody CartItem cartItem) {
+    public CartItem checkQty(@RequestBody CartItem cartItem) {
         return cartService.checkQty(cartItem);
+    }
+
+    @PostMapping("updateQty")
+    public int updateQty(@RequestBody CartItem cartItem) {
+        return cartService.updateQty(cartItem);
     }
 }

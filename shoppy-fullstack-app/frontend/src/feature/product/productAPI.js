@@ -18,7 +18,7 @@ export const getReturn = async () =>  {
 export const getQna = async (pid) =>  {
     const url = "/product/qna";
     const qna = await axiosPost(url, {"pid": pid});
-    console.log("qna --> ", qna);
+//    console.log("qna --> ", qna);
     return qna;
 }
 

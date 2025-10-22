@@ -186,7 +186,7 @@ where 	m.id = pq.id
 	상품 Return/Deliver 테이블 생성 : product_return
 ****************************************************/
 show tables;
-drop table product_qna;
+drop table product_return;
 desc member;
 create table product_return (
 	rid					int 			auto_increment		primary key
@@ -243,3 +243,39 @@ create table cart (
 show tables;
 desc cart;
 select * from cart;
+
+select cid, size, qty, pid, id, cdate from cart;
+
+-- mysql은 수정, 삭제 시 update mode를 변경
+set sql_safe_updates = 0;
+
+select * from cart;
+delete from cart where cid in(1, 2);
+
+-- pid: 1, size: xs 인 상품 조회
+select count(*) as checkQty, cid 
+from cart
+where pid = 1 and size = "xs"
+group by cid;
+
+select count(*) as checkQty
+from cart
+where pid = 1 and size = "s";
+
+select cid, sum(pid=1 and size='xs' and id='hong') as checkQty 
+	from cart 
+	group by cid, id
+	order by checkQty desc 
+	limit 1;
+
+select * from cart;
+
+-- pid, size를 이용하여 상품의 존재 check
+-- checkQty = 1 인 경우 cid(O) 유효데이터
+-- checkQty = 0 인 경우 cid(X) 무효데이터
+
+
+update cart set qty = qty + 1 where cid = 11;
+
+select count(*) from cart
+where id = 'test';
