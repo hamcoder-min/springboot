@@ -21,7 +21,7 @@ export function Cart() {
                 <div key={item.pid}>
                     <div className='cart-item'> 
                         {item.cid}
-                        <img src={item.image} alt="product image" />
+                        <img src={`/images/${item.image}`} alt="product image" />
                         <div className='cart-item-details'>
                             <p className='cart-item-title'>{item.name}</p>
                             <p className='cart-item-title'>{item.size}</p>
