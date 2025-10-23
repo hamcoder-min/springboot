@@ -41,4 +41,9 @@ public class CartServiceImpl implements CartService {
     public List<CartListResponse> findList(CartItem cartItem) {
         return cartRepository.findList(cartItem);
     }
+
+    @Override
+    public int deleteItem(CartItem cartItem) {
+        return cartRepository.deleteItem(cartItem);
+    }
 }

@@ -71,8 +71,35 @@ create table product_detailinfo(
 desc product_detailinfo;
 select * from product_detailinfo;
 
--- mysql에서 json, csv, excel, ... 데이터 파일을 업로드 하는 경로
+-- mac, windows : mysql에서 json, csv, excel... 데이터 파일을 업로드 하는 경로
 show variables like 'secure_file_priv';
+
+-- mac
+-- SET @json = CAST(LOAD_FILE('/usr/local/mysql-files/products.json') AS CHAR CHARACTER SET utf8mb4);
+
+-- JSON이 잘 읽혔는지 확인
+-- SELECT LENGTH(@json) AS len, JSON_VALID(@json) AS is_valid;
+-- len > 0, is_valid = 1 이면 OK
+
+
+-- mac
+/*
+INSERT INTO product_detailinfo (title_en, title_ko, pid, `list`)
+SELECT 
+    jt.title_en,
+    jt.title_ko,
+    jt.pid,
+    jt.`list`
+FROM JSON_TABLE(
+    @json,
+    '$[*]' COLUMNS (
+        pid        INT          PATH '$.pid',
+        title_en   VARCHAR(100) PATH '$.detailInfo.title_en',
+        title_ko   VARCHAR(100) PATH '$.detailInfo.title_ko',
+        `list`     JSON         PATH '$.detailInfo.list'
+    )
+) AS jt;
+*/
 
 -- products.json 파일의 detailinfo 정보 매핑
 -- insert into product_detailinfo(title_en, title_ko, pid, list)
@@ -156,7 +183,39 @@ from
                 , pid			int				path	'$.pid'
                 , cdate			datetime		path	'$.cdate'
             )
-    ) as jt;    
+    ) as jt;   
+    
+-- mac
+-- SET @json = CAST(LOAD_FILE('/usr/local/mysql-files/productQnA.json') AS CHAR CHARACTER SET utf8mb4);
+
+-- mac : JSON load 확인
+-- SELECT LENGTH(@json) AS len, JSON_VALID(@json) AS is_valid;
+-- len > 0, is_valid = 1 이면 OK
+
+-- mac : product_qna data insert
+/*
+insert into product_qna(title, content, is_complete, is_lock, id, pid, cdate)
+SELECT 
+    jt.title,
+    jt.content,
+    jt.is_complete,
+    jt.is_lock,
+    jt.id,
+    jt.pid,
+    jt.cdate
+FROM JSON_TABLE(
+    @json,
+    '$[*]' COLUMNS (
+			 title   		VARCHAR(100)  	PATH '$.title',
+			 content   		VARCHAR(200)  	PATH '$.content',
+			 is_complete 	boolean 		PATH '$.isComplete',
+             is_lock 		boolean 		PATH '$.isLock',
+			 id				varchar(50)	 	PATH '$.id',
+             pid			int				path '$.pid',
+             cdate			datetime		path '$.cdate'
+		   ) 
+) AS jt;
+*/
 
 select * from product_qna;
 desc product_qna;
@@ -220,6 +279,29 @@ from
 select * from product_return;
 desc product_return;
 
+-- mac : json 파일 형식은 [ { ~~} ], 배열로 감싼 형식
+-- SET @json = CAST(LOAD_FILE('/usr/local/mysql-files/productReturn.json') AS CHAR CHARACTER SET utf8mb4);
+
+-- mac : JSON이 잘 읽혔는지 확인
+-- SELECT LENGTH(@json) AS len, JSON_VALID(@json) AS is_valid;
+
+-- mac : json_table을 이용하여 데이터 추가
+/*
+insert into product_return(title, description, `list`)
+select 
+	jt.title,
+    jt.description,
+    jt.`list`
+FROM JSON_TABLE(
+    @json,
+    '$[*]' COLUMNS (
+			 title   		VARCHAR(100)  	PATH '$.title',
+			 description   	VARCHAR(200)  	PATH '$.description',
+			 `list` 		json	 		PATH '$.list'
+		   ) 
+) AS jt;
+*/
+
 select rid, title, description, list from product_return;
 
 /*******************************
@@ -262,20 +344,55 @@ select count(*) as checkQty
 from cart
 where pid = 1 and size = "s";
 
-select cid, sum(pid=1 and size='xs' and id='hong') as checkQty 
-	from cart 
-	group by cid, id
-	order by checkQty desc 
-	limit 1;
+-- pid, size를 이용하여 상품의 존재 check
+-- checkQty = 1 인 경우 cid(⭕) 유효데이터
+-- checkQty = 0 인 경우 cid(❌) 무효데이터
+SELECT 	ifnull(MAX(cid), 0) AS cid,
+		COUNT(*) AS checkQty
+FROM 	cart
+WHERE	pid = 1 AND size = 'xs' AND id = 'test';
 
 select * from cart;
 
--- pid, size를 이용하여 상품의 존재 check
--- checkQty = 1 인 경우 cid(O) 유효데이터
--- checkQty = 0 인 경우 cid(X) 무효데이터
+-- 장바구니 상품갯수 조회
+select count(qty) from cart where id = 'test';
+select ifnull(sum(qty), 0) as sumQty from cart where id = 'hong';
 
+-- 장바구니 리스트 조회 : 
+-- 어떤 회원이 어떤 상품을 몇개 넣었는가???
+select 	m.id
+		, p.pid
+        , p.name
+		, p.image
+        , p.price
+        , c.size
+        , c.qty
+        , c.cid
+        , (select sum(c.qty * p.price)
+			from cart c
+            inner join product p on c.pid = p.pid
+            where c.id = 'test') as total_price
+from	member m, product p, cart c
+where	m.id = c.id 
+	and c.pid = p.pid
+	and m.id = 'test333';
 
-update cart set qty = qty + 1 where cid = 11;
+select  m.id
+		, p.pid
+        , p.name
+		, p.image
+        , p.price
+        , c.size
+        , c.qty
+        , c.cid
+from    member m, product p, cart c
+where   m.id = c.id
+        and c.pid = p.pid
+        and m.id = 'hong';
+        
+-- 장바구니 총 상품 가격 : qty(cart), price(product)
+select	sum(c.qty * p.price) as totla_price
+from	cart c
+inner join product p on c.pid = p.pid
+where	c.id = 'test';
 
-select count(*) from cart
-where id = 'test';

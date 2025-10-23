@@ -11,4 +11,5 @@ public interface CartRepository {
     int updateQty(CartItem cartItem);
     CartItem getCount(CartItem cartItem);
     List<CartListResponse> findList(CartItem cartItem);
+    int deleteItem(CartItem cartItem);
 }

@@ -43,4 +43,9 @@ public class CartController {
     public List<CartListResponse> findList(@RequestBody CartItem cartItem) {
         return cartService.findList(cartItem);
     }
+
+    @PostMapping("/deleteItem")
+    public int deleteItem(@RequestBody CartItem cartItem) {
+        return cartService.deleteItem(cartItem);
+    }
 }
