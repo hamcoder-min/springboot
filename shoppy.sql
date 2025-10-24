@@ -361,25 +361,33 @@ select ifnull(sum(qty), 0) as sumQty from cart where id = 'hong';
 -- 장바구니 리스트 조회 : 
 -- 어떤 회원이 어떤 상품을 몇개 넣었는가???
 select 	m.id
+		, m.name
+        , m.phone
+        , m.email
 		, p.pid
         , p.name
+        , p.info
 		, p.image
         , p.price
         , c.size
         , c.qty
         , c.cid
-        , (select sum(c.qty * p.price)
+        , (select sum(c.qty * p.price) as total_price
 			from cart c
             inner join product p on c.pid = p.pid
-            where c.id = 'test') as total_price
+            where c.id = 'test') as total
 from	member m, product p, cart c
 where	m.id = c.id 
 	and c.pid = p.pid
 	and m.id = 'test333';
 
 select  m.id
+		, m.name
+        , m.phone
+        , m.email
 		, p.pid
         , p.name
+        , p.info
 		, p.image
         , p.price
         , c.size
@@ -395,4 +403,74 @@ select	sum(c.qty * p.price) as totla_price
 from	cart c
 inner join product p on c.pid = p.pid
 where	c.id = 'test';
+
+select * from member;
+
+-- 장바구니 리스트 VIEW 생성
+show tables from information_schema;
+select * from information_schema.views where table_schema = 'shoppy';
+
+drop view view_cartlist;
+
+create view view_cartlist
+as 
+select 	m.id
+		, m.name as mname
+        , m.phone
+        , m.email
+        , p.pid
+        , p.name
+        , p.info
+        , p.image
+        , p.price
+        , c.size
+        , c.qty
+        , c.cid
+        , t.totalPrice
+from	member m, product p, cart c
+		, (select c.id, sum(c.qty * p.price) as totalPrice
+			from cart c
+            inner join product p on c.pid = p.pid
+            group by c.id) as t
+where	m.id = c.id
+	and p.pid = c.pid
+    and c.id = t.id;
+      
+select	id, mname, phone, email, pid, name, info, image, price, size, qty, vc.cid, totalPrice
+from	view_cartlist vc,
+	(select c.cid, sum(c.qty * p.price) as total_price
+		from cart c
+		inner join product p on c.pid = p.pid
+		where c.id = 'hong'
+		group by c.cid) as total
+where vc.cid = total.cid;
+
+select * from view_cartlist where id = 'hong';
+
+select c.cid, sum(c.qty * p.price) as total_price
+		from cart c
+		inner join product p on c.pid = p.pid
+		group by c.cid;
+
+
+            
+select c.cid, sum(c.qty * p.price) as total_prce
+from cart c
+inner join product p on c.pid = p.pid
+where c.id = 'hong'
+group by c.cid;
+
+/* select a, (select ~~~~) as b <- 스칼라 서브쿼리
+from test, (select ~~~~) as t <- 인라인 뷰
+where id = (select ~~~~) <- 서브쿼리 */
+
+
+
+
+
+
+
+
+
+
 

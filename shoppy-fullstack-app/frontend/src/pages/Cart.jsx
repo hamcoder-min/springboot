@@ -28,7 +28,7 @@ export function Cart() {
                             <p className='cart-item-price'>{parseInt(item.price).toLocaleString()}원</p>
                         </div>
                         <div className='cart-quantity'>
-                            <button type='button' onClick={() => {dispatch(updateCart(item.cid,'-'))}}>-</button>
+                            <button type='button' onClick={() => {item.qty > 1 && dispatch(updateCart(item.cid,'-'))}}>-</button>
                             <input type="text" value={item.qty} readOnly/>
                             <button type='button' onClick={() => {dispatch(updateCart(item.cid,'+'))}}>+</button>
                         </div>

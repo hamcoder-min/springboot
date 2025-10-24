@@ -21,26 +21,20 @@ export const removeCart = (cid) => async (dispatch) => {
     const {userId} = JSON.parse(localStorage.getItem("loginInfo"));
     dispatch(getCartCount(userId));
     dispatch(showCart());
-//    dispatch(removeCartItem({"cid": cid}));
-//    dispatch(updateTotalPrice());
-//    dispatch(updateCartCount());
 }
 
 export const showCart = () => async (dispatch) => {
-//    const jsonData = await axiosData('/data/products.json');
     const url = "/cart/list";
     const {userId} = JSON.parse(localStorage.getItem("loginInfo"));
     const jsonData = await axiosPost(url, {"id": userId});
-    console.log("jsonData showcart --> ", jsonData);
     dispatch(showCartItem({"items": jsonData}));
-    dispatch(updateTotalPrice({"totalPrice": jsonData[0].totalPrice}));
+    jsonData.length && dispatch(updateTotalPrice({"totalPrice": jsonData[0].totalPrice}));
 }
 
 export const updateCart = (cid, type) => async (dispatch) => {
     const url = "/cart/updateQty";
     const data = {"cid": cid, "type": type};
     const rows = await axiosPost(url, data);
-    console.log('updateCart rows -> ', rows);
     const {userId} = JSON.parse(localStorage.getItem("loginInfo"));
     dispatch(getCartCount(userId));
     dispatch(showCart());

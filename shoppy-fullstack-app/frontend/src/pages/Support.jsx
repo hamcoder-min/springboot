@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { SearchForm } from '../components/commons/SearchForm.jsx';
 import { MenuList } from '../components/commons/MenuList.jsx';
 import { axiosData } from '../utils/dataFetch.js';
+import { getList } from  '../feature/support/supportAPI.js';
 
 export function Support() {
+    const dispatch = useDispatch();
+
     const [menus, setMenus] = useState([]);
     const [category, setCategory] = useState([]);
     const [list, setList] = useState([]);
@@ -11,26 +15,18 @@ export function Support() {
     useEffect(() => {
         const fetch = async () => {
             const jsonData = await axiosData('/data/support.json');
+            const list = await getList('all');
             setMenus(jsonData.menus);
             setCategory(jsonData.category);
-            setList(jsonData.list);
+            setList(list);
         }
         fetch();
     }, []);
     
-    const filterList = (type) => {
-        console.log('filterList -> ', type);
-        //시스템점검 --> list: system
-        const filter = async () => {
-            const jsonData = await axiosData('/data/support.json');
-            if(type === 'all') {
-                setList(jsonData.list);
-            } else{
-                const filterData = jsonData.list.filter((item) => item.type === type);
-                setList(filterData);
-            }
-        }
-        filter();
+    const filterList = async (stype) => {
+        console.log('type -> ', stype);
+        const list = await getList(stype);
+        setList(list);
     }
 
     return (
@@ -60,7 +56,7 @@ export function Support() {
                             {list && list.map((item, idx) =>
                                 <tr>
                                     <td>{idx + 1}</td>
-                                    <td>[{item.type}]</td>
+                                    <td>[{item.stype}]</td>
                                     <td>{item.title}</td>
                                     <td>{item.rdate}</td>
                                     <td>{item.hits}</td>
