@@ -464,13 +464,43 @@ group by c.cid;
 from test, (select ~~~~) as t <- 인라인 뷰
 where id = (select ~~~~) <- 서브쿼리 */
 
+/*********************************
+	고객센터 테이블 생성 : support
+*********************************/
+create table support (
+	sid			int				auto_increment		primary key
+    , title		varchar(100)	not null
+    , content	varchar(200)	
+    , stype		varchar(30)		not null
+	, hits		int
+    , rdate		datetime
+);
+show tables;
+select * from support;
+desc support;
 
 
+insert into support(title, stype, hits, rdate)
+select 
+	jt.title
+    , jt.stype
+    , jt.hits
+    , jt.rdate
+from 
+	json_table(
+		cast(load_file('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/support_list.json')
+			AS CHAR CHARACTER SET utf8mb4),
+            '$[*]' COLUMNS (
+				title			varchar(100) 	path	'$.title'
+				, stype			varchar(30)		path	'$.type'
+                , hits			int				path	'$.hits'
+                , rdate			datetime		path	'$.rdate'
+            )
+    ) as jt; 
 
+select * from support;
 
+desc support;
 
-
-
-
-
-
+select sid, title, stype, hits, rdate from support;
+select sid, title, stype, hits, rdate from support where stype = 'event';
