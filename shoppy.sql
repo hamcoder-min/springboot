@@ -74,13 +74,45 @@ select * from product_detailinfo;
 -- mac, windows : mysql에서 json, csv, excel... 데이터 파일을 업로드 하는 경로
 show variables like 'secure_file_priv';
 
+-- mac os
+-- set global local_infile = 1;
+
+-- CREATE TEMPORARY TABLE tmp_products (doc JSON);
+
+-- -- 관리자 계정으로
+-- SET GLOBAL local_infile = 1;
+-- SHOW GLOBAL VARIABLES LIKE 'local_infile';  -- ON 인지 확인
+
+-- LOAD DATA LOCAL INFILE '/Users/leekm/Downloads/products.json'
+-- INTO TABLE tmp_products
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (@row) SET doc = CAST(@row AS JSON);
+
+-- SET @j = CAST(LOAD_FILE('/Users/leekm/Downloads/products.json') AS CHAR CHA-- RACTER SET utf8mb4);
+
+-- SET @json = LOAD_FILE('/Users/leekm/Downloads/products.json');
+
+-- SELECT LENGTH(@j), JSON_VALID(@j);
+
+-- SHOW VARIABLES LIKE 'secure_file_priv';
+
+-- ********
+SET @json = CAST(LOAD_FILE('/usr/local/mysql-files/products.json') AS CHAR CHARACTER SET utf8mb4);
+
+-- JSON이 잘 읽혔는지 확인
+SELECT LENGTH(@json) AS len, JSON_VALID(@json) AS is_valid;
+-- len > 0, is_valid = 1 이면 OK
+
+
+-- 실제 삽입
+
 -- mac
 -- SET @json = CAST(LOAD_FILE('/usr/local/mysql-files/products.json') AS CHAR CHARACTER SET utf8mb4);
 
 -- JSON이 잘 읽혔는지 확인
 -- SELECT LENGTH(@json) AS len, JSON_VALID(@json) AS is_valid;
 -- len > 0, is_valid = 1 이면 OK
-
 
 -- mac
 /*
