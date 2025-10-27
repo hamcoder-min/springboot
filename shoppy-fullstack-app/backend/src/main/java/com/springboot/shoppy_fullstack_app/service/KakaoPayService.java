@@ -126,8 +126,8 @@ public class KakaoPayService {
                                                     body,
                                                     KakaoApproveResponse.class
                                             );
-
             return res;
+
         } catch (Exception e) {
             System.err.println("Kakao Pay Approve 실패: " + e.getMessage());
             return null;
