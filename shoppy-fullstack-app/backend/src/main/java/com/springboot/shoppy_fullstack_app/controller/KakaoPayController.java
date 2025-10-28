@@ -4,6 +4,7 @@ import com.springboot.shoppy_fullstack_app.dto.KakaoPay;
 import com.springboot.shoppy_fullstack_app.dto.KakaoApproveResponse;
 import com.springboot.shoppy_fullstack_app.dto.KakaoReadyResponse;
 import com.springboot.shoppy_fullstack_app.service.KakaoPayService;
+import com.springboot.shoppy_fullstack_app.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,13 @@ import java.util.UUID;
 public class KakaoPayController {
 
     private final KakaoPayService kakaoPayService;
+    private final OrderService orderService;
+    private KakaoPay payInfo = null; //kakaoPay DTO 클래스를 전역으로 선언
 
     @Autowired
-    public KakaoPayController(KakaoPayService kakaoPayService) {
+    public KakaoPayController(KakaoPayService kakaoPayService, OrderService orderService) {
         this.kakaoPayService = kakaoPayService;
+        this.orderService = orderService;
     }
 
     /**
@@ -32,12 +36,11 @@ public class KakaoPayController {
     @PostMapping("/kakao/ready")
     public KakaoReadyResponse paymentKakao(@RequestBody  KakaoPay kakaoPay) {
         //orderId(주문번호) 생성 : UUID 클래스 사용
-//        UUID uuid = UUID.randomUUID();
-//        System.out.println("uuid --> "+ uuid.toString());
         kakaoPay.setOrderId(UUID.randomUUID().toString());
-
+        payInfo = kakaoPay; //kakaoPay 객체 주소를 payInfo에 복사, 전역으로 확대
         String TEMP_TID = null;
         KakaoReadyResponse response = kakaoPayService.kakaoPayReady(kakaoPay);
+
         if (response != null) {
             TEMP_TID = response.getTid(); // 발급받은 TID 저장
         } else {
@@ -63,7 +66,8 @@ public class KakaoPayController {
 //        System.out.println("Kakao Approve Success --> " + approve);
 
         // 3. 결제 완료 처리 (DB 상태 업데이트 등)
-        //DB 상태 업데이트 - 주문 상품을 order_history 테이블에 저장, cart에서는 삭제
+        //DB 상태 업데이트 - 주문 상품을 order, order_detail 테이블에 저장, cart에서는 삭제
+        orderService.save(payInfo);
 
         URI redirect = URI.create("http://localhost:3000/payResult?orderId=" + orderId + "&status=success");
         HttpHeaders headers = new HttpHeaders();
