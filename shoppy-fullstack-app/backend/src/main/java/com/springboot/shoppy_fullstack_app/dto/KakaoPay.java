@@ -2,6 +2,8 @@ package com.springboot.shoppy_fullstack_app.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class KakaoPay {
     private String orderId;
@@ -11,7 +13,7 @@ public class KakaoPay {
     private String totalAmount;
     private Receiver receiver;
     private PaymentInfo paymentInfo;
-    private String cidList;
+    private List<Integer> cidList;
 
     @Data
     public static class Receiver {
