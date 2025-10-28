@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -70,6 +71,16 @@ public class JdbcTemplateOrderRepository implements OrderRepository{
         params.put("discount", kakaoPay.getPaymentInfo().getDiscountAmount());
         params.put("cidList", kakaoPay.getCidList());
 
+        return namedParameterJdbcTemplate.update(sql, params);
+    }
+
+    @Override
+    public int deleteCartItem(List<Integer> cidList) {
+        String sql = """
+                delete from cart where cid in(:cidList)
+                """;
+        Map<String, Object> params = new HashMap<>();
+        params.put("cidList", cidList);
         return namedParameterJdbcTemplate.update(sql, params);
     }
 }

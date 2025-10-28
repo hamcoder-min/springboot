@@ -594,4 +594,31 @@ create table order_detail (
 show tables;
 desc order_detail;
 
-select * from cart where cid = 35;
+select * from cart where id = 'hong';
+
+select * from orders;
+select * from order_detail;
+
+insert into 
+	order_detail(order_code, pid, pname, size, qty, pid_total_price, discount)
+select
+	:orderCode, pid, name as pname, size, qty, totalPrice, as pid_total_price,
+    :discount
+from view_cartList
+where cid in (:cidList);
+
+desc orders;
+
+insert into orders(order_code, member_id, shipping_fee, discount_amount, total_amount, receiver_name, receiver_phone, zipcode, address1, address2, memo, odate)
+values();
+
+select * from orders;
+select * from order_detail;
+
+set sql_safe_updates = 0;
+delete from orders;
+
+select * from orders;
+select * from order_detail;
+
+select * from cart;
