@@ -622,3 +622,10 @@ select * from orders;
 select * from order_detail;
 
 select * from cart;
+
+use shoppy;
+select database();
+
+select ifnull(MAX(pwd), null) as pwd from member where  id = 'fsfsf';
+
+select * from member;
