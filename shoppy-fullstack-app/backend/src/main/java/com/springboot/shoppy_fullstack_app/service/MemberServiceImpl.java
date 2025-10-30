@@ -33,7 +33,6 @@ public class MemberServiceImpl implements MemberService {
     public boolean idCheck(String id) {
         boolean result = true;
         long count = memberRepository.findById(id);
-        System.out.println("count -> " + count);
         if(count == 0) result = false;
         return result;
     }
@@ -41,7 +40,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean login(Member member) {
         String encodePwd = memberRepository.login(member.getId());
-        System.out.println(encodePwd);
         boolean result = passwordEncoder.matches(member.getPwd(), encodePwd);
         return result;
     }

@@ -36,9 +36,10 @@ export const getLogin = (formData, param) => async (dispatch) => {
             SpringBoot - @RestController, @PostMapping("/member/login")
             axios api
         */
-        const url = "/member/login";
+        const url = "/member/login";  //프록시를 통해 전송시 상대경로!
         const result = await axiosPost(url, formData);
-        if(result) {
+        console.log("result", result);
+        if(result.login) {
             dispatch(login({"userId": formData.id}));
             //장바구니 카운트 함수 호출
 //            const count = await getCartCount(formData.id);
@@ -54,7 +55,11 @@ export const getLogin = (formData, param) => async (dispatch) => {
     Logout
 */
 export const getLogout = () => async (dispatch) => {
-    dispatch(logout());
-    dispatch(resetCartCount());
-    return true;
+    const url = "/member/logout";
+    const result = await axiosPost(url, {});
+    if(result) {
+        dispatch(logout());
+        dispatch(resetCartCount());
+    }
+    return result;
 }
