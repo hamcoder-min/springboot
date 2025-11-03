@@ -36,8 +36,8 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
+                .httpBasic(basic -> basic.disable())
+                .formLogin(form -> form.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/member/**", "/product/**", "/cart/**", "/support/**", "/payment/**").permitAll()
                         .anyRequest().authenticated()
