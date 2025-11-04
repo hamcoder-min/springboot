@@ -46,6 +46,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .authenticationProvider(authenticationProvider())
                 .csrf((csrf) -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
@@ -53,11 +54,10 @@ public class SecurityConfig {
                 .cors((cors) -> cors
                         .configurationSource(corsConfigurationSource())
                 )
-                .authenticationProvider(authenticationProvider())
-                .securityContext(sc -> sc.requireExplicitSave(true)) // ← 선택. true면 아래 로그인 컨트롤러에서 save 필요
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
+                .securityContext(sc -> sc.requireExplicitSave(true)) // ← 선택. true면 아래 로그인 컨트롤러에서 save 필요
                 .httpBasic(basic -> basic.disable())
                 .formLogin(form -> form.disable())
                 .requestCache(rc -> rc.disable()) //로그인 후 리다이렉트 방지
@@ -82,7 +82,7 @@ public class SecurityConfig {
 
 
     /**
-     * 로그인 사용자 정보를 저장한 UserDetailService객체를 Dao(Repository)객체(DB연동객체)의 파라미터로
+     * 로그인 사용자 정보를 저장한 UserDetailService객체를 Dao객체(DB연동객체)의 파라미터로
      * 전송하고 AuthenticationProvider를 통해 로그인 실행
      */
     /** ✅ DaoAuthenticationProvider 하나만 등록 */
@@ -163,3 +163,6 @@ final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
         return (StringUtils.hasText(headerValue) ? this.plain : this.xor).resolveCsrfTokenValue(request, csrfToken);
     }
 }
+
+
+

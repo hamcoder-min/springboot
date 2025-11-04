@@ -30,7 +30,7 @@ public class KakaoPayController {
 
     private final KakaoPayService kakaoPayService;
     private final OrderService orderService;
-    private KakaoPay payInfo = null; //kakaoPay DTO 클래스를 전역으로 선언
+    private KakaoPay payInfo = null; //KaKaoPay DTO 클래스를 전역으로 선언
     private final UserDetailsService userDetailsService;
 
     @Autowired
@@ -49,8 +49,8 @@ public class KakaoPayController {
     @PostMapping("/kakao/ready")
     public KakaoReadyResponse paymentKakao(@RequestBody  KakaoPay kakaoPay) {
         //orderId(주문번호) 생성 : UUID 클래스 사용
+        payInfo = kakaoPay;   //kakaoPay 객체 주소를 payInfo 복사, 전역으로 확대
         kakaoPay.setOrderId(UUID.randomUUID().toString());
-        payInfo = kakaoPay; //kakaoPay 객체 주소를 payInfo에 복사, 전역으로 확대
         String TEMP_TID = null;
         KakaoReadyResponse response = kakaoPayService.kakaoPayReady(kakaoPay);
 
@@ -66,13 +66,12 @@ public class KakaoPayController {
     /**
      * ✅ 결제 성공
      */
-
     @GetMapping("/qr/success")
     public ResponseEntity<Void> success( @RequestParam String orderId,
                                          @RequestParam("pg_token") String pgToken,
                                          HttpServletRequest request) {
 
-        /******************** 카카오페이 결제 성공 후 세션 복원 시작 ********************/
+        /// /////////////
         // 0. 현재 SecurityContext에 Authentication이 있는지 확인
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -119,7 +118,8 @@ public class KakaoPayController {
 
 
 
-        /******************** 카카오페이 결제 성공 후 세션 복원 종료 ********************/
+        /// //////////////
+
         // 1. tid, userId 조회
         String tid = kakaoPayService.findByTid(orderId);
         String userId = kakaoPayService.findByUserId(orderId);
@@ -145,8 +145,9 @@ public class KakaoPayController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
+
     /**
-     * ✅ 3️⃣ 결제 취소 콜백
+     * ✅ 결제 취소 콜백
      */
     @GetMapping("/qr/cancel")
     public ResponseEntity<?> cancel(@RequestParam String orderId) {
@@ -154,7 +155,7 @@ public class KakaoPayController {
     }
 
     /**
-     * ✅ 4️⃣ 결제 실패 콜백
+     * ✅ 결제 실패 콜백
      */
     @GetMapping("/qr/fail")
     public ResponseEntity<?> fail(@RequestParam String orderId) {

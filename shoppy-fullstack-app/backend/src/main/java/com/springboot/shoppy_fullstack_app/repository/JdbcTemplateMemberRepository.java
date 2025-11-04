@@ -1,11 +1,13 @@
 package com.springboot.shoppy_fullstack_app.repository;
 
 import com.springboot.shoppy_fullstack_app.dto.Member;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.Optional;
 
 @Repository //jdbcTemplateMemberRepository
 public class JdbcTemplateMemberRepository implements MemberRepository {
@@ -48,5 +50,21 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
         return encodePwd;
 //        Member member = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Member.class), id);    //RowMapper<T>
 //        return member.getPwd();
+    }
+
+    /**
+     * Spring Security의 AuthenticationProvider 객체에 의해 UserDetailsService 호출
+     */
+    @Override
+    public Optional<Member> findByMember(String id) {
+        String sql = "select ifnull(MAX(id), null) as id, " +
+                " ifnull(MAX(pwd), null) as pwd from member where id = ?";
+        try {
+            Member member = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Member.class), id);
+            return Optional.ofNullable(member);
+        } catch (EmptyResultDataAccessException e) {
+            // 조회 결과가 없을 때 null 반환 대신 Optional.empty()
+            return Optional.empty();
+        }
     }
 }
