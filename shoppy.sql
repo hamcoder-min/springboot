@@ -629,3 +629,9 @@ select database();
 select ifnull(MAX(pwd), null) as pwd from member where  id = 'fsfsf';
 
 select * from member;
+select * from product;
+desc member;
+desc product;
+
+-- findById('test')
+select id from member where id='test';
