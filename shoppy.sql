@@ -635,3 +635,13 @@ desc product;
 
 -- findById('test')
 select id from member where id='test';
+
+desc orders;
+desc order_detail;
+desc product_detailinfo;
+desc product;
+desc product_qna;
+
+show tables;
+
+alter table product change imgList img_list JSON;
