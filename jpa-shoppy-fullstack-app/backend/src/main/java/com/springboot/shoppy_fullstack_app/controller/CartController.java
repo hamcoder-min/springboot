@@ -1,17 +1,13 @@
 package com.springboot.shoppy_fullstack_app.controller;
 
-import com.springboot.shoppy_fullstack_app.dto.CartItem;
-import com.springboot.shoppy_fullstack_app.dto.CartListResponse;
+import com.springboot.shoppy_fullstack_app.dto.CartItemDto;
+import com.springboot.shoppy_fullstack_app.dto.CartListResponseDto;
 import com.springboot.shoppy_fullstack_app.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/cart")
@@ -24,28 +20,28 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public int add(@RequestBody CartItem cartItem) {
+    public int add(@RequestBody CartItemDto cartItem) {
         return cartService.add(cartItem);
     }
 
     @PostMapping("/checkQty")
-    public CartItem checkQty(@RequestBody CartItem cartItem) {
+    public CartItemDto checkQty(@RequestBody CartItemDto cartItem) {
         return cartService.checkQty(cartItem);
     }
 
     @PostMapping("updateQty")
-    public int updateQty(@RequestBody CartItem cartItem) {
+    public int updateQty(@RequestBody CartItemDto cartItem) {
         return cartService.updateQty(cartItem);
     }
 
     @PostMapping("/count")
-    public CartItem count(@RequestBody CartItem cartItem) {
+    public CartItemDto count(@RequestBody CartItemDto cartItem) {
         return cartService.getCount(cartItem);
     }
 
     @PostMapping("/list")
-    public List<CartListResponse> findList(@RequestBody CartItem cartItem,
-                                           HttpServletRequest request) {
+    public List<CartListResponseDto> findList(@RequestBody CartItemDto cartItem,
+                                              HttpServletRequest request) {
 //        HttpSession session = request.getSession(false); //기존 생성 가져오기
 //        String sid = (String)session.getAttribute("sid");
 //        String ssid = session.getId();
@@ -63,7 +59,7 @@ public class CartController {
     }
 
     @PostMapping("/deleteItem")
-    public int deleteItem(@RequestBody CartItem cartItem) {
+    public int deleteItem(@RequestBody CartItemDto cartItem) {
         return cartService.deleteItem(cartItem);
     }
 }

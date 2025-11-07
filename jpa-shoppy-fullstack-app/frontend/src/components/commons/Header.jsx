@@ -26,7 +26,7 @@ export function Header() {
             <div className="header">
                 <Link to="/" className="header-left">
                     <FiShoppingBag />
-                    <span>JPA-Shoppy-redux(toolkit)::fullstack</span>
+                    <span>✨✨ JPA-Shoppy-redux(toolkit)::fullstack</span>
                 </Link>
                 <nav className="header-right">
                     {isLogin && <span>[{userId}]</span>}
