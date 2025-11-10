@@ -1,6 +1,6 @@
 package com.springboot.shoppy_fullstack_app.service;
 
-import com.springboot.shoppy_fullstack_app.dto.KakaoPay;
+import com.springboot.shoppy_fullstack_app.dto.KakaoPayDto;
 import com.springboot.shoppy_fullstack_app.dto.KakaoApproveResponse;
 import com.springboot.shoppy_fullstack_app.dto.KakaoReadyResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +48,7 @@ public class KakaoPayService {
     // ----------------------------------------------------
     // 1. 결제 준비 (Ready)
     // ----------------------------------------------------
-    public KakaoReadyResponse kakaoPayReady(KakaoPay kakaoPay) {
+    public KakaoReadyResponse kakaoPayReady(KakaoPayDto kakaoPay) {
 
         // (예시) 주문번호는 DB 생성 PK/UUID 사용 권장
         String orderId = kakaoPay.getOrderId(); // null이면 반드시 세팅하고 오세요.
@@ -62,7 +62,7 @@ public class KakaoPayService {
         params.add("item_name", kakaoPay.getItemName());
         params.add("quantity", String.valueOf(kakaoPay.getQty()));  // ✅ 문자열로
         params.add("total_amount", String.valueOf(kakaoPay.getTotalAmount()));
-         params.add("tax_free_amount", "0"); // 필요 시 사용
+        params.add("tax_free_amount", "0"); // 필요 시 사용
 
         // 콜백 URL에 orderId를 함께 전달 (승인 단계에서 사용)
         params.add("approval_url", "http://localhost:8080/payment/qr/success?orderId=" + orderId);

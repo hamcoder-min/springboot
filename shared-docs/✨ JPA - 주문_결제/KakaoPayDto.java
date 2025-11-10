@@ -1,11 +1,15 @@
 package com.springboot.shoppy_fullstack_app.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-public class KakaoPay {
+@AllArgsConstructor
+@NoArgsConstructor
+public class KakaoPayDto {
     private String orderId;
     private String userId;
     private String itemName;
@@ -30,5 +34,7 @@ public class KakaoPay {
         private int shippingFee;
         private int discountAmount;
         private int totalAmount;
-    }//PaymentInfo
+    }
+
 }//KakaoPay dto
+

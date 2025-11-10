@@ -652,6 +652,8 @@ show tables;
 alter table product change imgList img_list JSON;
 
 select * from cart;
+select * from orders;
+select * from order_detail;
 
 select * from view_cartlist;
 desc view_cartlist;
@@ -659,3 +661,16 @@ desc view_cartlist;
 -- mysql에서는 view 수정 불가!!, 컬럼 수정 시 재생성
 select * from information_schema.views
 	where table_name='view_cartlist';
+    
+desc orders;
+
+-- mysql은 수정, 삭제 시 update mode를 변경
+set sql_safe_updates = 0;
+
+delete from orders;
+delete from cart;
+
+desc support;
+
+
+
