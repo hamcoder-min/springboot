@@ -13,6 +13,11 @@ public class SupportDto {
     private String stype;
     private int hits;
     private String rdate;
+    private int rowNumber;  //페이징 처리 후 출력되는 행번호
+    private int currentPage;
+    private int pageSize;
+    private String type;
+    private String keyword;
 
     //DTO <=> Entity : Front 결과 출력
     public SupportDto() {}
