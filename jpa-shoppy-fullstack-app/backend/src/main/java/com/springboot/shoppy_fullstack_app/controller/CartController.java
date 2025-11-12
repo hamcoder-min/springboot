@@ -29,8 +29,9 @@ public class CartController {
         return cartService.checkQty(cartItem);
     }
 
-    @PostMapping("updateQty")
+    @PostMapping("/updateQty")
     public int updateQty(@RequestBody CartItemDto cartItem) {
+        System.out.println("cartItem--> "+ cartItem.getCid()+ cartItem.getType());
         return cartService.updateQty(cartItem);
     }
 

@@ -48,6 +48,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public int updateQty(CartItemDto cartItemDto) {
+        System.out.println("cartItem--> "+ cartItemDto.getCid()+ cartItemDto.getType());
         int result = 0;
         if(cartItemDto.getType().equals("+")){
             result = jpaCartRepository.increaseQty(cartItemDto.getCid());

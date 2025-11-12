@@ -32,6 +32,7 @@ export const showCart = () => async (dispatch) => {
 }
 
 export const updateCart = (cid, type) => async (dispatch) => {
+    console.log("22222");
     const url = "/cart/updateQty";
     const data = {"cid": cid, "type": type};
     const rows = await axiosPost(url, data);
@@ -55,6 +56,7 @@ export const checkQty = async (pid, size, id) => {
 export const addCart = (pid, size) => async (dispatch) => {
     const {userId} = JSON.parse(localStorage.getItem("loginInfo"));
     const checkResult = await checkQty(pid, size, userId);
+    console.log("checkResult --> ", checkResult);
     if(!checkResult.checkQty) {
         const url = "/cart/add";
         const item = {"pid": pid, "size": size, "qty": 1, "id": userId};
@@ -63,7 +65,8 @@ export const addCart = (pid, size) => async (dispatch) => {
 //        dispatch(updateCartCount({"count": 1, "type": true}));
     } else {
         //qty update
-        const rows = await updateCart(checkResult.cid, "+");
+        console.log("111111");
+        const rows = dispatch(updateCart (checkResult.cid, "+"));
 //        dispatch(updateCartCount({"count": 1, "type": true}));
         alert("상품이 추가되었습니다.");
     }
