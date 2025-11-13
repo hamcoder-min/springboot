@@ -672,5 +672,18 @@ delete from cart;
 
 desc support;
 
+use shoppy;
+select database();
+
+select * from member;
+
+-- role 컬럼 추가
+alter table member add role varchar(10);
+select * from member;
+update member set role = 'USER';
+update member set mdate = now() where id = 'hong22';
+update member set role = 'ADMIN' where id = 'shoppyadmin';
+
+
 
 
