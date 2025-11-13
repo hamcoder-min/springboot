@@ -14,6 +14,7 @@ import { AuthProvider } from './context/AuthContext.js';
 import { ProtectedPageRoute } from './pages/ProtectedPageRoute.js';
 import { PayResult } from './pages/PayResult.jsx';
 import { ShoppyAdmin } from './pages/ShoppyAdmin.jsx';
+import { ErrorPage } from './pages/ErrorPage.jsx';
 
 import './styles/cgvSignup.css';
 import './styles/cgv.css';
@@ -59,6 +60,7 @@ export default function App() {
             } />
             <Route path='/shoppy/admin' element={ <ShoppyAdmin />} />
           </Route>
+            <Route path="/error/:type" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>

@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartListResponseDto> findList(CartItemDto cartItemDto) {
-        return jpaCartRepository.findByUserName(cartItemDto.getId());
+        return jpaCartRepository.findList(cartItemDto.getId());
     }
 
     @Override
