@@ -39,10 +39,10 @@ export const getLogin = (formData, param) => async (dispatch) => {
         */
         const url = "/member/login";  //프록시를 통해 전송시 상대경로!
         const result = await axiosPost(url, formData);
-        console.log("result", result);
+        console.log("result :: ", result, result.role[0].authority);
         if(result.login) {
             await refreshCsrfToken();
-            dispatch(login({"userId": formData.id}));
+            dispatch(login({"userId": formData.id, "role": result.role[0].authority}));
             dispatch(getCartCount(formData.id));
             return true;
         }
