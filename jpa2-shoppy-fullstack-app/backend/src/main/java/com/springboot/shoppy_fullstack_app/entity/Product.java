@@ -4,29 +4,29 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name="product")
 @Getter @Setter
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pid;
-
-    @Column(name="name", length = 200, nullable = false)
     private String name;
-
-    @Column(name="price", columnDefinition = "MEDIUMTEXT")
     private long price;
-
-    @Column(name="info", length = 200)
     private String info;
-
-    @Column(name="rate")
     private double rate;
-
-    @Column(name="image", length = 100)
     private String image;
 
-    @Column(name="img_list", columnDefinition = "JSON")
+    @Column(columnDefinition = "JSON")
     private String imgList;
+
+    //Product(1) : (1..N)ProductDetailinfo 엔티티 정의 - 필드값
+    //Product(one) to ProductDetailinfo(one) :: pid가 하나씩 있기 때문에 OneToOne 사용. 만약 pid가 겹치는게 여러개라면(1이 2개 이상씩 있다거나...) OneToMany 사용.
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ProductDetailinfo detailinfo;
+
+    //Product(1) : (1..N)ProductQna
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductQna> qna;
 }

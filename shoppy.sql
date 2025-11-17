@@ -684,6 +684,19 @@ update member set role = 'USER';
 update member set mdate = now() where id = 'hong22';
 update member set role = 'ADMIN' where id = 'shoppyadmin';
 
+select * from product;
+select * from member;
+update member set role = 'USER' where id='test2';
 
+select * from product_detailinfo;
+
+select	*
+from 	product p, product_detailinfo pd
+where	p.pid = pd.pid;
+
+select * from product_qna;
+
+select	*
+from product p, product_return r;
 
 

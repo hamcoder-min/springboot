@@ -10,20 +10,35 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
-public interface JpaProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
     //상품 상세 - Return & Delivery
     @Query("select r from ProductReturn r")
     ProductReturn findReturn();
 
     //상품 상세 - QnA
-    @Query("select q from ProductQna q where q.pid = :pid")
-    List<ProductQna> findQna(@Param("pid") int pid);
+    @Query("""
+            select distinct p
+                from Product p
+                left join p.qna q
+                where p.pid = :pid
+            """)
+    Optional<Product> findProductWithQna(@Param("pid") int pid);
 
     //상품 상세 - 디테일 탭
-    @Query("select d from ProductDetailinfo d where d.pid = :pid")
-    ProductDetailinfo findProductDetailinfo(@Param("pid") int pid);
+    @Query("""
+            select distinct p 
+                from Product p
+                left join p.detailinfo di
+                where p.pid = :pid
+            """)
+    Optional<Product> findProductWithDetail(@Param("pid") int pid);
+
+//    @Query("select d from ProductDetailinfo d where d.pid = :pid")
+//    ProductDetailinfo findProductDetailinfo(@Param("pid") int pid);
 
     Product findByPid(int pid); //상품 상세 조회
-//    List<Product> findAll();  //상품 전체 리스트 조회
+    List<Product> findAll();  //상품 전체 리스트 조회
 }

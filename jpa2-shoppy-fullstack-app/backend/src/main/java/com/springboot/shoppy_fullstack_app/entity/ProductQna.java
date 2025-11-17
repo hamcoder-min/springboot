@@ -17,6 +17,10 @@ public class ProductQna {
     private boolean isComplete;
     private boolean isLock;
     private String id;
-    private int pid;
     private String cdate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pid", nullable = false)
+    private Product product;
+
 }
