@@ -1,6 +1,8 @@
 package com.springboot.shoppy_fullstack_app.controller;
 
 import com.springboot.shoppy_fullstack_app.dto.CartItemDto;
+import com.springboot.shoppy_fullstack_app.dto.CartItemRequestDto;
+import com.springboot.shoppy_fullstack_app.dto.CartItemResponseDto;
 import com.springboot.shoppy_fullstack_app.dto.CartListResponseDto;
 import com.springboot.shoppy_fullstack_app.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,47 +22,33 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public int add(@RequestBody CartItemDto cartItem) {
-        return cartService.add(cartItem);
+    public int add(@RequestBody CartItemRequestDto requestDto) {
+        return cartService.add(requestDto);
     }
 
     @PostMapping("/checkQty")
-    public CartItemDto checkQty(@RequestBody CartItemDto cartItem) {
-        return cartService.checkQty(cartItem);
+    public CartItemResponseDto checkQty(@RequestBody CartItemRequestDto requestDto) {
+        return cartService.checkQty(requestDto);
     }
 
     @PostMapping("/updateQty")
-    public int updateQty(@RequestBody CartItemDto cartItem) {
-        System.out.println("cartItem--> "+ cartItem.getCid()+ cartItem.getType());
-        return cartService.updateQty(cartItem);
+    public int updateQty(@RequestBody CartItemRequestDto requestDto) {
+        return cartService.updateQty(requestDto);
     }
 
     @PostMapping("/count")
-    public CartItemDto count(@RequestBody CartItemDto cartItem) {
-        return cartService.getCount(cartItem);
+    public CartItemResponseDto count(@RequestBody CartItemRequestDto requestDto) {
+        return cartService.getCount(requestDto);
     }
 
     @PostMapping("/list")
-    public List<CartListResponseDto> findList(@RequestBody CartItemDto cartItem,
+    public List<CartListResponseDto> findList(@RequestBody CartItemRequestDto requestDto,
                                               HttpServletRequest request) {
-//        HttpSession session = request.getSession(false); //기존 생성 가져오기
-//        String sid = (String)session.getAttribute("sid");
-//        String ssid = session.getId();
-//        ResponseEntity<?> response = null;
-//
-//        if(ssid != null && sid != null) {  //로그인 회원
-//            System.out.println("ssid :: " + ssid + "sid :: " + sid);
-//            List<CartListResponse> list = cartService.findList(cartItem);
-//            response = ResponseEntity.ok(list);
-//        } else {
-//            response = ResponseEntity.ok(Map.of("result", false));
-//        }
-
-        return cartService.findList(cartItem);
+        return cartService.findList(requestDto);
     }
 
     @PostMapping("/deleteItem")
-    public int deleteItem(@RequestBody CartItemDto cartItem) {
-        return cartService.deleteItem(cartItem);
+    public int deleteItem(@RequestBody CartItemRequestDto requestDto) {
+        return cartService.deleteItem(requestDto);
     }
 }

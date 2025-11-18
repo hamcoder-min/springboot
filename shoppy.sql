@@ -699,4 +699,9 @@ select * from product_qna;
 select	*
 from product p, product_return r;
 
+select * from view_cartlist;
+
+select * from member where id='test4';
+
+select * from cart where id='test4';
 
