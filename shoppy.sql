@@ -705,3 +705,18 @@ select * from member where id='test4';
 
 select * from cart where id='test4';
 
+select * from orders;
+desc orders;
+
+-- entity 연관관계 시 참조 테이블의 컬럼명과 일치시킨다.
+alter table orders change member_id id varchar(50) not null;
+desc orders;
+
+select * from cart;
+select * from member;
+desc order_detail;
+select * from order_detail;
+
+
+
+
