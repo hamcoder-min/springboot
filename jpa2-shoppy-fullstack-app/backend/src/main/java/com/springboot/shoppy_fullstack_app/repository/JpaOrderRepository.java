@@ -14,7 +14,10 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
     /** step1 : 주문/결제 - 주문(Orders) 테이블 저장 **/
     Order save(Order entity);
 
-    /** step2 : 주문/결제 - 주문상세(Order_detail) 테이블 저장, 서브쿼리, Native-Query **/
+    /**
+     * step2 : 주문/결제 - 주문상세(Order_detail) 테이블 저장, 서브쿼리, Native-Query
+     *         서브쿼리를 통한 insert 작업은 Native Query를 사용함, JPA는 지원❌
+     */
     @Modifying
     @Query(value = """
             insert into
